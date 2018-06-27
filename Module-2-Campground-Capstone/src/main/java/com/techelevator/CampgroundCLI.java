@@ -5,6 +5,7 @@ import javax.sql.DataSource;
 import org.apache.commons.dbcp2.BasicDataSource;
 
 import com.techelevator.model.jdbc.JDBCCampgroundDAO;
+import com.techelevator.model.jdbc.JDBCParkDAO;
 import com.techelevator.view.Menu;
 
 public class CampgroundCLI {
@@ -32,6 +33,7 @@ public class CampgroundCLI {
 	
 	private static BasicDataSource dataSource = new BasicDataSource();
 	private static JDBCCampgroundDAO campgroundDao;
+	private static JDBCParkDAO parkDao;
 	private Menu menu;
 
 	public static void main(String[] args) {
@@ -46,10 +48,43 @@ public class CampgroundCLI {
 
 	public CampgroundCLI(DataSource datasource) {
 		campgroundDao = new JDBCCampgroundDAO(dataSource);
+		parkDao = new JDBCParkDAO(dataSource);
 		this.menu = new Menu(System.in, System.out);
 	}
 	
 	public void run() {
 		
+		boolean outerLoop = true;
+		while(outerLoop) {
+			
+			System.out.println("Select park to view information or make a reservation: ");
+			String choice = (String)menu.getChoiceFromOptions(VIEW_PARKS_OPTIONS);
+			if(choice.equals(VIEW_PARKS_OPTION_QUIT)) {
+				outerLoop =false;
+				continue;
+			}
+			
+			displayParkInfoScreen(choice);
+		
+			
+			
+			
+			
+			
+			
+			
+		}
+		
+	}
+	
+	public void displayParkInfoScreen(String choice) {
+		JDBCParkDAO park = new JDBCParkDAO(dataSource);
+		if(choice.equals(VIEW_PARKS_OPTION_ACADIA)) {
+			park.displayParkInfo(1);
+		} else if (choice.equals(VIEW_PARKS_OPTION_ARCHES)) {
+			park.displayParkInfo(2);
+		} else if (choice.equals(VIEW_PARKS_OPTION_CUYAHOGA)) {
+			park.displayParkInfo(3);
+		}
 	}
 }
