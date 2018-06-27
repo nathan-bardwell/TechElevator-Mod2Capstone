@@ -18,7 +18,7 @@ public class Campground {
 	public long getParkId() {
 		return parkId;
 	}
-	public void setPark_id(long parkId) {
+	public void setParkId(long parkId) {
 		this.parkId = parkId;
 	}
 	public String getName() {
