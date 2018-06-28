@@ -23,14 +23,14 @@ public class JDBCCampgroundDAO implements CampgroundDAO {
 	}
 
 	@Override
-	public List<Campground> getParkCampgrounds(int parkId) {
+	public List<Campground> getParkCampgrounds(String parkName) {
 		List<Campground> campgrounds = new ArrayList<>();
 		String sqlGetParkCampgrounds = "SELECT campground.* " +
 				                       "FROM campground " +
 				                       "JOIN park " +
 				                       "ON campground.park_id = park.park_id " +
-				                       "WHERE park.park_id = ? ";
-		SqlRowSet results = jdbcTemplate.queryForRowSet(sqlGetParkCampgrounds, parkId);
+				                       "WHERE park.name = ? ";
+		SqlRowSet results = jdbcTemplate.queryForRowSet(sqlGetParkCampgrounds, parkName);
 		while (results.next()) {
 			Campground campResult = mapRowToCampground(results);
 			campgrounds.add(campResult);
@@ -118,8 +118,8 @@ public class JDBCCampgroundDAO implements CampgroundDAO {
 		Campground campground = new Campground();
 		campground.setCampgroundId(results.getLong("campground_id"));
 		campground.setName(results.getString("name"));
-		campground.setOpenFrom(results.getString("open_from"));
-		campground.setOpenTo(results.getString("open_to"));
+		campground.setOpenFrom(results.getString("open_from_mm"));
+		campground.setOpenTo(results.getString("open_to_mm"));
 		campground.setDailyFee(results.getDouble("daily_fee"));
 		return campground;
 	}

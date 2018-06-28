@@ -1,11 +1,22 @@
 package com.techelevator;
 
+import java.awt.List;
+import java.nio.channels.SelectionKey;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.Scanner;
+
 import javax.sql.DataSource;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 
 import com.techelevator.model.jdbc.JDBCCampgroundDAO;
 import com.techelevator.model.jdbc.JDBCParkDAO;
+import com.techelevator.model.jdbc.JDBCSiteDAO;
 import com.techelevator.view.Menu;
 
 public class CampgroundCLI {
@@ -34,9 +45,10 @@ public class CampgroundCLI {
 	private static BasicDataSource dataSource = new BasicDataSource();
 	private static JDBCCampgroundDAO campgroundDao;
 	private static JDBCParkDAO parkDao;
+	private static JDBCSiteDAO siteDao;
 	private Menu menu;
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ParseException {
 		dataSource.setUrl("jdbc:postgresql://localhost:5432/campground");
 		dataSource.setUsername("postgres");
 		dataSource.setPassword("postgres1");
@@ -48,10 +60,12 @@ public class CampgroundCLI {
 	public CampgroundCLI(DataSource datasource) {
 		campgroundDao = new JDBCCampgroundDAO(dataSource);
 		parkDao = new JDBCParkDAO(dataSource);
+		siteDao =  new JDBCSiteDAO(dataSource);
 		this.menu = new Menu(System.in, System.out);
 	}
 	
-	public void run() {
+	public void run() throws ParseException {
+		Scanner input = new Scanner(System.in);
 		
 		boolean outerLoop = true;
 		
@@ -74,9 +88,29 @@ public class CampgroundCLI {
 							showCampgroundInformation(choice);
 							System.out.println('\n' + "Please make another selection: ");
 							String choice3 = (String)menu.getChoiceFromOptions(PARK_CAMPGROUNDS_OPTIONS);
-							
-							if (choice3.equals(PARK_CAMPGROUNDS_OPTION_SEARCH_FOR_AVAILABLE_RESERVATION)) {
 								
+							if (choice3.equals(PARK_CAMPGROUNDS_OPTION_SEARCH_FOR_AVAILABLE_RESERVATION)) {
+								showCampgroundInformation(choice);
+								java.util.List<Campground> list = campgroundDao.getParkCampgrounds(choice);
+								System.out.println("\n\n\nWhich campground would you like:  (enter 0 to cancel)");
+								int campgroundSelection = input.nextInt();
+								input.nextLine();
+								if(campgroundSelection == 0) {
+									innerLoop = false;
+									continue;
+								}
+								System.out.println("Enter in an arrival date: (YYYY-MM-DD)");
+								String arrivalDateString = input.nextLine();
+								System.out.println("Enter in a departure date: (YYYY-MM-DD)");
+								String departDateString = input.nextLine();
+								
+								DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+								LocalDate arrivalDate = LocalDate.parse(arrivalDateString,formatter);
+								LocalDate departDate = LocalDate.parse(departDateString,formatter);
+								
+								
+								
+								siteDao.displayOpenSites(list.get(campgroundSelection-1), arrivalDate, departDate);
 								innerLoop = false;
 							}
 							

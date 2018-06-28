@@ -1,9 +1,13 @@
 package com.techelevator.model.jdbc;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.Date;
 
 import javax.print.attribute.ResolutionSyntax;
 
+import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.util.WeakReferenceMonitor.ReleaseListener;
@@ -14,11 +18,16 @@ import com.techelevator.SiteDAO;
 
 public class JDBCSiteDAO implements SiteDAO{
 	
+	private static final TemporalUnit DAYS= ChronoUnit.DAYS;
 	private JdbcTemplate jdbcTemplate;
 
+	public JDBCSiteDAO(BasicDataSource dataSource) {
+		this.jdbcTemplate = new JdbcTemplate(dataSource);
+	}
+
 	@Override
-	public void displayOpenSites(Campground campground, Date arrivalDate, Date departDate) {
-		String sqlOpenSites = "SELECT site.*, campground.* " +
+	public void displayOpenSites(Campground campground, LocalDate arrivalDate, LocalDate departDate) {
+		String sqlOpenSites = "SELECT site.*, camp.* " +
 							 "FROM site " +
 				             "JOIN campground camp " +
 				             "ON camp.campground_id = site.campground_id " +
@@ -38,7 +47,7 @@ public class JDBCSiteDAO implements SiteDAO{
 		int rvLength = results.getInt("max_rv_length");
 		boolean accessible = results.getBoolean("accessible");
 		boolean utilities =  results.getBoolean("utilities");
-		double cost = results.getDouble("daily_fee");
+		double cost = results.getDouble("daily_fee") * (arrivalDate.until(departDate, DAYS));
 		if (accessible) {
 			accessibleStr = "Yes";
 		} else {
