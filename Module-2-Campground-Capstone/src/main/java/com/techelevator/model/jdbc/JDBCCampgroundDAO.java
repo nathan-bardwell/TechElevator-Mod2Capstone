@@ -46,7 +46,7 @@ public class JDBCCampgroundDAO implements CampgroundDAO {
 			SqlRowSet results = jdbcTemplate.queryForRowSet(sqlGetAllCampgroundsInPark, choice);
 	
 			System.out.println("\n" + choice + " National Park Campgrounds" + '\n');
-			System.out.println("     Name                            Open                Close               Daily Fee");
+			System.out.println(String.format("%-5s%-32s%-10s%-10s%s", " ", "Name", "Open", "Close", "Daily Fee"));
 			int campgroundCounter = 1;
 			while (results.next()) {
 				String parkName = results.getString("name");
@@ -104,7 +104,7 @@ public class JDBCCampgroundDAO implements CampgroundDAO {
 				}else if(closeDate.equals("12")) {
 					closeDate = "December";
 				}
-				System.out.printf('\n' + "#" +campgroundCounter + "   " + parkName + "     \t\t"+"\t     " + openDate + " \t         " + closeDate + "  \t     $" + "%.2f" , dailyFee);
+				System.out.println(String.format("#%-4d%-32s%-10s%-10s$%#.2f", campgroundCounter, parkName, openDate, closeDate, dailyFee));
 				campgroundCounter++;
 			}
 	}

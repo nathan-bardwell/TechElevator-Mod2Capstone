@@ -38,7 +38,7 @@ public class JDBCSiteDAO implements SiteDAO{
 				             "LIMIT 5";
 		SqlRowSet results = jdbcTemplate.queryForRowSet(sqlOpenSites, campground.getCampgroundId(), arrivalDate, departDate);
 		System.out.println("Here are the top 5 available campsites for your requested dates:");
-		System.out.println("Site No. Max Occupancy Accessible? Max RV Length Utility Cost");
+		System.out.println("Site No.			 Max Occupancy		Accessible?		Max RV Length		Utility			Cost");
 		while (results.next()) {
 		String accessibleStr;
 		String utilityStr;
@@ -58,7 +58,7 @@ public class JDBCSiteDAO implements SiteDAO{
 		} else {
 			utilityStr = "N/A";
 		}
-		System.out.println(siteNumber + " " + maxOccupancy + " " + accessibleStr + " " + rvLength + " " + utilityStr + " $" + cost );
+		System.out.println("#" + siteNumber + "			 " + maxOccupancy + "			 " + accessibleStr + "			 " + rvLength + "			 " + utilityStr + "			 $" + cost );
 		}
 		
 		
