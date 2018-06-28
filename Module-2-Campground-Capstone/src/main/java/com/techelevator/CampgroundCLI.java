@@ -54,16 +54,42 @@ public class CampgroundCLI {
 	public void run() {
 		
 		boolean outerLoop = true;
+		
 		while(outerLoop) {
-			
+			boolean innerLoop = true;
 			System.out.println("Select park to view information or make a reservation: ");
 			String choice = (String)menu.getChoiceFromOptions(VIEW_PARKS_OPTIONS);
+			
 			if(choice.equals(VIEW_PARKS_OPTION_QUIT)) {
 				outerLoop =false;
 				continue;
 			}
+					
+					while (innerLoop) {
+						displayParkInfoScreen(choice);
+						System.out.println('\n' + "Please make another selection: ");
+						String choice2 = (String)menu.getChoiceFromOptions(PARK_INFO_OPTIONS);
+					
+						if (choice2.equals(PARK_INFO_OPTION_VIEW_CAMPGROUNDS)) {
+							showCampgroundInformation(choice);
+							System.out.println('\n' + "Please make another selection: ");
+							String choice3 = (String)menu.getChoiceFromOptions(PARK_CAMPGROUNDS_OPTIONS);
+							
+							if (choice3.equals(PARK_CAMPGROUNDS_OPTION_SEARCH_FOR_AVAILABLE_RESERVATION)) {
+								
+								innerLoop = false;
+							}
+							
+						} else if (choice2.equals(PARK_INFO_OPTION_SEARCH_FOR_RESERVATION)) {
+							showCampgroundInformation(choice);
+							
+							innerLoop = false;
+						} else if (choice2.equals(RETURN_TO_PREVIOUS_SCREEN)) {
+							innerLoop = false;
+						}
+					} 
+
 			
-			displayParkInfoScreen(choice);
 		
 			
 		}
@@ -79,6 +105,11 @@ public class CampgroundCLI {
 		} else if (choice.equals(VIEW_PARKS_OPTION_CUYAHOGA)) {
 			park.displayParkInfo(3);
 		}
+	}
+	
+	public void showCampgroundInformation(String choice) {
+		JDBCCampgroundDAO campgroundDao = new JDBCCampgroundDAO(dataSource);
+		campgroundDao.displayCampgroundInfo(choice);
 	}
 	
 }
