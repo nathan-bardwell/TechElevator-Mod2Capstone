@@ -16,6 +16,7 @@ import org.apache.commons.dbcp2.BasicDataSource;
 
 import com.techelevator.model.jdbc.JDBCCampgroundDAO;
 import com.techelevator.model.jdbc.JDBCParkDAO;
+import com.techelevator.model.jdbc.JDBCReservationDAO;
 import com.techelevator.model.jdbc.JDBCSiteDAO;
 import com.techelevator.view.Menu;
 
@@ -46,6 +47,7 @@ public class CampgroundCLI {
 	private static JDBCCampgroundDAO campgroundDao;
 	private static JDBCParkDAO parkDao;
 	private static JDBCSiteDAO siteDao;
+	private static JDBCReservationDAO reservationDAO;
 	private Menu menu;
 
 	public static void main(String[] args) throws ParseException {
@@ -61,6 +63,7 @@ public class CampgroundCLI {
 		campgroundDao = new JDBCCampgroundDAO(dataSource);
 		parkDao = new JDBCParkDAO(dataSource);
 		siteDao =  new JDBCSiteDAO(dataSource);
+		reservationDAO = new JDBCReservationDAO(datasource);
 		this.menu = new Menu(System.in, System.out);
 	}
 	
@@ -71,7 +74,7 @@ public class CampgroundCLI {
 		
 		while(outerLoop) {
 			boolean innerLoop = true;
-			System.out.println("Select park to view information or make a reservation: ");
+			System.out.println("\n\nSelect park to view information or make a reservation: ");
 			String choice = (String)menu.getChoiceFromOptions(VIEW_PARKS_OPTIONS);
 			
 			if(choice.equals(VIEW_PARKS_OPTION_QUIT)) {
@@ -111,6 +114,13 @@ public class CampgroundCLI {
 								
 								
 								siteDao.displayOpenSites(list.get(campgroundSelection-1), arrivalDate, departDate);
+								
+								reservationDAO.createReservation(list.get(campgroundSelection-1), arrivalDate, departDate); 
+									
+									
+								
+								
+								
 								innerLoop = false;
 							}
 							
