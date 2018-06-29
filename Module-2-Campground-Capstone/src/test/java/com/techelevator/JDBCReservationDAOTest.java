@@ -12,11 +12,14 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 
+import com.techelevator.model.jdbc.JDBCReservationDAO;
+
 public class JDBCReservationDAOTest {
 	/* Using this particular implementation of DataSource so that
 	 * every database interaction is part of the same database
 	 * session and hence the same database transaction */
 	private static SingleConnectionDataSource dataSource;
+	private static JDBCReservationDAO reservationDao;
 	
 	/* Before any tests are run, this method initializes the datasource for testing. */
 	@BeforeClass
@@ -29,6 +32,7 @@ public class JDBCReservationDAOTest {
 		 * returned by this DataSource. This allows us to rollback
 		 * any changes after each test */
 		dataSource.setAutoCommit(false);
+		reservationDao = new JDBCReservationDAO(dataSource);
 	}
 	
 	/* After all tests have finished running, this method will close the DataSource */
@@ -52,7 +56,7 @@ public class JDBCReservationDAOTest {
 
 	@Test
 	public void test() {
-		fail("Not yet implemented");
+		
 	}
 
 }
