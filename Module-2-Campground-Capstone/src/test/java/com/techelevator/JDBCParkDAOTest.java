@@ -12,11 +12,14 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 
+import com.techelevator.model.jdbc.JDBCParkDAO;
+
 public class JDBCParkDAOTest  {
 	/* Using this particular implementation of DataSource so that
 	 * every database interaction is part of the same database
 	 * session and hence the same database transaction */
 	private static SingleConnectionDataSource dataSource;
+	private static JDBCParkDAO parkDAO;
 	
 	/* Before any tests are run, this method initializes the datasource for testing. */
 	@BeforeClass
@@ -29,6 +32,8 @@ public class JDBCParkDAOTest  {
 		 * returned by this DataSource. This allows us to rollback
 		 * any changes after each test */
 		dataSource.setAutoCommit(false);
+		parkDAO = new JDBCParkDAO(dataSource);
+		
 	}
 	
 	/* After all tests have finished running, this method will close the DataSource */
@@ -48,6 +53,14 @@ public class JDBCParkDAOTest  {
 	 * they can instantiate a DAO for testing */
 	protected DataSource getDataSource() {
 		return dataSource;
+	}
+	 @Test
+	public void testGetAllParks() {
+		
+		assertEquals("Acadia", parkDAO.getAllParks().get(0).getName());
+		assertEquals("Arches", parkDAO.getAllParks().get(1).getName());
+		assertEquals("Cuyahoga Valley", parkDAO.getAllParks().get(2).getName());
+
 	}
 
 	

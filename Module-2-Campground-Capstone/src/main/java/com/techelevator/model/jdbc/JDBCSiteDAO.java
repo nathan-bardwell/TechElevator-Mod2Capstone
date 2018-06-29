@@ -38,8 +38,7 @@ public class JDBCSiteDAO implements SiteDAO{
 				             "ORDER BY RANDOM() LIMIT 5";
 		SqlRowSet results = jdbcTemplate.queryForRowSet(sqlOpenSites, campground.getCampgroundId(), arrivalDate, departDate);
 		System.out.println("Here are the top 5 available campsites for your requested dates:");
-		System.out.println("Campground Name               Site No.			 Max Occupancy		Accessible?		Max RV Length		Utility			Cost");
-		//System.out.println(String.format("%-32s%-5s%-5s%-5s%-5s%-5s$%.2f", " ", "Campground Name", "Site No.", "Max Occupancy", "Accessible?", "Max RV Length", "Utility", "Cost"));
+		System.out.println(String.format("%-32s%-20s%-20s%-20s%-20s%-20s%-20s", "Campground Name", "Site No.", "Max Occupancy", "Accessible?", "Max RV Length", "Utility", "Cost"));
 		while (results.next()) {
 		String accessibleStr;
 		String utilityStr;
@@ -59,7 +58,7 @@ public class JDBCSiteDAO implements SiteDAO{
 		} else {
 			utilityStr = "N/A";
 		}
-		System.out.println(campground.getName() + "                     #" + siteNumber + "			 " + maxOccupancy + "			 " + accessibleStr + "			 " + rvLength + "			 " + utilityStr + "			 $" + cost );
+		System.out.println(String.format("%-32s%-20s%-20s%-20s%-20s%-20s$%.2f" , campground.getName() , siteNumber , maxOccupancy , accessibleStr , rvLength , utilityStr , cost ));
 		}
 		
 		
@@ -77,8 +76,7 @@ public class JDBCSiteDAO implements SiteDAO{
 				             "ORDER BY RANDOM() LIMIT 5";
 		SqlRowSet results = jdbcTemplate.queryForRowSet(sqlOpenSites, arrivalDate, departDate);
 		System.out.println("Here are the top 5 available campsites for your requested dates:");
-		System.out.println("Campground Name               Site No.			 Max Occupancy		Accessible?		Max RV Length		Utility			Cost");
-		//System.out.println(String.format("%-32s%-5s%-5s%-5s%-5s%-5s$%.2f", " ", "Campground Name", "Site No.", "Max Occupancy", "Accessible?", "Max RV Length", "Utility", "Cost"));
+		System.out.println(String.format("%-32s%-20s%-20s%-20s%-20s%-20s%-20s", "Campground Name", "Site No.", "Max Occupancy", "Accessible?", "Max RV Length", "Utility", "Cost"));
 
 		while (results.next()) {
 		String accessibleStr;
@@ -100,7 +98,7 @@ public class JDBCSiteDAO implements SiteDAO{
 		} else {
 			utilityStr = "N/A";
 		}
-		System.out.println(campgroundName + "                    \t #" + siteNumber + "			 " + maxOccupancy + "			 " + accessibleStr + "			 " + rvLength + "			 " + utilityStr + "			 $" + cost );
+		System.out.println(String.format("%-32s%-20s%-20s%-20s%-20s%-20s$%.2f" , campgroundName , siteNumber , maxOccupancy , accessibleStr , rvLength , utilityStr , cost ));
 		}
 		
 		

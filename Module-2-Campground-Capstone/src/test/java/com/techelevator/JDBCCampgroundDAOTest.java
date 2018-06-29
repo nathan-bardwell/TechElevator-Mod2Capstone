@@ -12,11 +12,15 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 
+import com.techelevator.model.jdbc.JDBCCampgroundDAO;
+import com.techelevator.model.jdbc.JDBCParkDAO;
+
 public class JDBCCampgroundDAOTest  {
 	/* Using this particular implementation of DataSource so that
 	 * every database interaction is part of the same database
 	 * session and hence the same database transaction */
 	private static SingleConnectionDataSource dataSource;
+	private static JDBCCampgroundDAO campgroundDAO;
 	
 	/* Before any tests are run, this method initializes the datasource for testing. */
 	@BeforeClass
@@ -29,6 +33,7 @@ public class JDBCCampgroundDAOTest  {
 		 * returned by this DataSource. This allows us to rollback
 		 * any changes after each test */
 		dataSource.setAutoCommit(false);
+		campgroundDAO = new JDBCCampgroundDAO(dataSource);
 	}
 	
 	/* After all tests have finished running, this method will close the DataSource */
@@ -52,7 +57,13 @@ public class JDBCCampgroundDAOTest  {
 
 	@Test
 	public void testGetParkCampgrounds() {
-		
+		assertEquals("Blackwoods", campgroundDAO.getParkCampgrounds("Acadia").get(0).getName());
+		assertEquals("Seawall", campgroundDAO.getParkCampgrounds("Acadia").get(1).getName());
+		assertEquals("Schoodic Woods", campgroundDAO.getParkCampgrounds("Acadia").get(2).getName());
+		assertEquals("Devil's Garden", campgroundDAO.getParkCampgrounds("Arches").get(0).getName());
+		assertEquals("Canyon Wren Group Site", campgroundDAO.getParkCampgrounds("Arches").get(1).getName());
+		assertEquals("Juniper Group Site", campgroundDAO.getParkCampgrounds("Arches").get(2).getName());
+		assertEquals("The Unnamed Primitive Campsites", campgroundDAO.getParkCampgrounds("Cuyahoga Valley").get(0).getName());
 	}
 
 }

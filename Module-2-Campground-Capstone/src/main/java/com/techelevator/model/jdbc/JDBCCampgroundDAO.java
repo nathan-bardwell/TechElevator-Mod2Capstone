@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.management.openmbean.OpenDataException;
+import javax.sql.DataSource;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.omg.PortableServer.ID_ASSIGNMENT_POLICY_ID;
@@ -18,7 +19,7 @@ public class JDBCCampgroundDAO implements CampgroundDAO {
 	
 	private JdbcTemplate jdbcTemplate;
 
-	public JDBCCampgroundDAO(BasicDataSource dataSource) {
+	public JDBCCampgroundDAO(DataSource dataSource) {
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
 	}
 
