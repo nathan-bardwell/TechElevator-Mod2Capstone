@@ -125,7 +125,20 @@ public class CampgroundCLI {
 							}
 							
 						} else if (choice2.equals(PARK_INFO_OPTION_SEARCH_FOR_RESERVATION)) {
-							showCampgroundInformation(choice);
+						
+							System.out.println("Enter in an arrival date: (YYYY-MM-DD)");
+							String arrivalDateString = input.nextLine();
+							System.out.println("Enter in a departure date: (YYYY-MM-DD)");
+							String departDateString = input.nextLine();
+							
+							DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+							LocalDate arrivalDate = LocalDate.parse(arrivalDateString,formatter);
+							LocalDate departDate = LocalDate.parse(departDateString,formatter);
+							
+							siteDao.displayOpenSitesWithCampground(arrivalDate, departDate);
+							reservationDAO.searchReservationByDate(arrivalDate, departDate);
+							
+								
 							
 							innerLoop = false;
 						} else if (choice2.equals(RETURN_TO_PREVIOUS_SCREEN)) {
